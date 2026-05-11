@@ -1,11 +1,54 @@
 {
+  "name": "react-vis-demo",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "dev": "ts-node -r tsconfig-paths/register ./index.ts"
+    "dev": "vite --mode development",
+    "build": "tsc -b && vite build --mode production",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
+  },
+  "homepage": "https://inspition.github.io/demo-react",
+  "peerDependencies": {
+    "lodash-es": "^4.17.20"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^5.6.1",
+    "@ant-design/v5-patch-for-react-19": "^1.0.3",
+    "@antv/g-webgl": "^2.0.43",
+    "@antv/g2": "^5.2.11",
+    "antd": "^5.24.0",
+    "axios": "^1.7.9",
+    "dayjs": "^1.11.13",
+    "openmeteo": "^1.1.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router": "^7.1.5",
+    "react-syntax-highlighter": "^15.6.1"
   },
   "devDependencies": {
-    "ts-node": "^10.9.2",
-    "typescript": "^5.9.3",
-    "tsconfig-paths": "^4.2.0"
+    "@eslint/js": "^9.19.0",
+    "@types/node": "^22.13.1",
+    "@types/react": "^19.0.8",
+    "@types/react-dom": "^19.0.3",
+    "@types/react-syntax-highlighter": "^15.5.13",
+    "@vitejs/plugin-react-swc": "^3.5.0",
+    "cesium": "^1.126.0",
+    "eslint": "^9.19.0",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.18",
+    "gh-pages": "^6.3.0",
+    "globals": "^15.14.0",
+    "sass": "^1.84.0",
+    "typescript": "~5.7.2",
+    "typescript-eslint": "^8.22.0",
+    "vite": "^6.1.0",
+    "vite-plugin-cesium": "^1.2.23",
+    "vite-plugin-env-compatible": "^2.0.1",
+    "vitest": "^3.0.7"
   },
   "packageManager": "pnpm@10.11.0+sha512.6540583f41cc5f628eb3d9773ecee802f4f9ef9923cc45b69890fb47991d4b092964694ec3a4f738a420c918a333062c8b925d312f42e4f0c263eb603551f977"
 }
