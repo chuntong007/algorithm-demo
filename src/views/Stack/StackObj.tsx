@@ -1,5 +1,6 @@
-import { StackObj } from '@/stack'
-import { Button, Card, Row } from 'antd'
+import { decimalToBase, StackObj } from '@/algorithm'
+import { Button, Card, Divider, Form, Input, Row } from 'antd'
+import FormItem from 'antd/es/form/FormItem'
 import React, { useRef, useState } from 'react'
 
 const Page: React.FC = () => {
@@ -22,6 +23,9 @@ const Page: React.FC = () => {
     setContent(stackObj.current.size())
   }
 
+  const [binary, setBinary] = useState<number>()
+  const [base, setBase] = useState<number>(2)
+
   return (
     <>
       <Card title="Stack Object" style={{ width: 500 }}>
@@ -34,6 +38,30 @@ const Page: React.FC = () => {
         <Row>输出：{content + ''}</Row>
 
         <Row>是否为空：{stackObj.current.isEmpty() + ''}</Row>
+      </Card>
+
+      <Divider />
+
+      <Card title="二进制转换">
+        <Form layout="inline">
+          <FormItem label="十进制数">
+            <Input
+              type="number"
+              value={binary}
+              onChange={e => setBinary(Number(e.target.value))}
+            />
+          </FormItem>
+
+          <FormItem label="输入进制">
+            <Input
+              type="number"
+              value={base}
+              onChange={e => setBase(Number(e.target.value))}
+            />
+          </FormItem>
+        </Form>
+
+        <Row>输出：{decimalToBase(binary ?? 0, base)}</Row>
       </Card>
     </>
   )

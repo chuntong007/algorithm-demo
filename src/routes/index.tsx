@@ -12,6 +12,7 @@ interface RouteProps extends PathRouteProps {
 
 const Stack = lazy(() => import('@/views/Stack'))
 const StackObj = lazy(() => import('@/views/Stack/StackObj'))
+const Queue = lazy(() => import('@/views/Queue'))
 
 /**
  * 路由配置
@@ -28,5 +29,10 @@ export const routes: RouteProps[] = [
     path: 'stack-obj',
     element: <StackObj />,
     meta: { title: '栈-对象实现' },
+  },
+  {
+    path: 'queue',
+    element: <Queue />,
+    meta: { title: '队列' },
   },
 ]

@@ -23,7 +23,7 @@ const Page: React.FC = () => {
 
   return (
     <>
-      <Card title="Stack Array" style={{ width: 500 }}>
+      <Card title="Queue" style={{ width: 500 }}>
         <Button onClick={genrate}>生成栈</Button>
         <Button onClick={pop}>移除栈顶</Button>
         <Button onClick={clear}>清空栈</Button>
