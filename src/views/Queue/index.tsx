@@ -1,42 +1,80 @@
-import { StackArray } from '@/algorithm'
-import { Button, Card, Row } from 'antd'
+import { Queue } from '@/algorithm'
+import { Button, Card, message, Space, Typography } from 'antd'
 import React, { useRef, useState } from 'react'
 
+type QueItem = string | number
+
 const Page: React.FC = () => {
-  const stackArr = useRef(new StackArray())
-  const str = 'qwertyuiopasdfghjklzxcvbnm1234567890'
-  const [content, setContent] = useState<unknown>()
+  const queueRef = useRef(new Queue<QueItem>())
+  const [queItems, setQueItems] = useState<QueItem[]>([])
 
-  function genrate() {
-    stackArr.current.push(...str.split(''))
-    setContent(stackArr.current.size())
+  console.log({ queueRef, setQueItems })
+
+  function enqueue() {
+    const item = Math.random().toString(36).slice(2, 8)
+    queueRef.current.enqueue(item)
   }
 
-  function pop() {
-    setContent(stackArr.current.pop())
-  }
+  function withUpdate(foo?: (...args: unknown[]) => void) {
+    return () => {
+      foo?.()
 
-  function clear() {
-    stackArr.current.clear()
-    setContent(stackArr.current.size())
+      // console.log({ message })
+
+      setQueItems(queueRef.current.getItems())
+    }
   }
 
   return (
-    <>
-      <Card title="Queue" style={{ width: 500 }}>
-        <Button onClick={genrate}>生成栈</Button>
-        <Button onClick={pop}>移除栈顶</Button>
-        <Button onClick={clear}>清空栈</Button>
+    <Card title="Queue" style={{ minWidth: 500 }}>
+      <Typography>
+        <Space>
+          <Button onClick={withUpdate(enqueue)} type="primary">
+            队列添加随机数enqueue
+          </Button>
 
-        <h1>栈顶：{stackArr.current.peek() + ''}</h1>
+          <Button
+            onClick={withUpdate(() => queueRef.current.clear())}
+            type="primary"
+          >
+            clear
+          </Button>
 
-        <Row>输出：{content + ''}</Row>
+          <Button
+            onClick={withUpdate(() =>
+              message.info('dequeue: ' + queueRef.current.dequeue()),
+            )}
+            type="primary"
+          >
+            dequeue
+          </Button>
 
-        <Row>是否为空：{stackArr.current.isEmpty() + ''}</Row>
+          <Button
+            onClick={() => message.info('peek: ' + queueRef.current.peek())}
+            type="primary"
+          >
+            peek
+          </Button>
 
-        <p>{stackArr.current.values().join(', ')}</p>
-      </Card>
-    </>
+          <Button
+            onClick={() => message.info('toString: ' + queueRef.current.toString())}
+            type="primary"
+          >
+            toString
+          </Button>
+        </Space>
+
+        <Typography.Paragraph>
+          {queueRef.current.toString()}
+        </Typography.Paragraph>
+
+        <ul>
+          {queItems.map(v => (
+            <li>{v}</li>
+          ))}
+        </ul>
+      </Typography>
+    </Card>
   )
 }
 
