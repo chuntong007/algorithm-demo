@@ -1,2 +1,2 @@
 export { StackArray, StackObj, decimalToBase } from './stack'
-export { Queue } from './queue'
+export { Queue, Deque } from './queue'

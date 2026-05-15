@@ -1,84 +1,126 @@
-# React 算法演示 & 数据可视化
+# Algorithm Demo
 
-> 演示地址：[https://inspition.github.io/demo-react/](https://inspition.github.io/demo-react/)
->
-> **注意：Cesium 地图采用 BingMaps 卫星底图，未开启科学上网时地图将无法正常渲染。**
+基于 React + TypeScript + Vite 的数据结构与算法可视化学习项目，通过交互式界面演示常见数据结构的工作原理。
 
-## 项目简介
+## 在线预览
 
-基于 React 19 + TypeScript 构建的学习型演示项目，涵盖两个方向：
+[https://inspition.github.io/demo-react](https://inspition.github.io/demo-react)
 
-1. **数据结构算法可视化**：以交互式界面展示栈、队列等经典数据结构的运作过程。
-2. **GIS 与数据可视化**：集成 Cesium 地图与 AntV G2 图表，实现点击地图区域获取天气数据并可视化展示。
+## 功能模块
 
-## 快速上手
+| 路由 | 页面 | 说明 |
+|------|------|------|
+| `/` | 栈 - 数组实现 | 使用数组实现栈，演示 push / pop / peek / clear 操作 |
+| `/stack-obj` | 栈 - 对象实现 | 使用对象（哈希）实现栈，演示相同操作 |
+| `/queue` | 队列 & 双端队列 | 演示 Queue 和 Deque 的入队、出队、首尾操作 |
 
-```bash
-# 安装依赖
-pnpm i
+## 数据结构 API
 
-# 启动开发服务器
-pnpm run dev
+### `StackArray<T>`
 
-# 构建生产包
-pnpm run build
+基于数组实现的栈。
 
-# 部署到 GitHub Pages
-pnpm run deploy
+| 方法 | 说明 |
+|------|------|
+| `push(...el)` | 入栈（支持多个元素） |
+| `pop()` | 出栈，返回栈顶元素 |
+| `peek()` | 查看栈顶元素（不移除） |
+| `isEmpty()` | 是否为空 |
+| `size()` | 元素数量 |
+| `clear()` | 清空栈 |
+| `values()` | 返回底层数组 |
+
+### `StackObj<T>`
+
+基于对象（私有字段）实现的栈。
+
+| 方法 | 说明 |
+|------|------|
+| `push(el)` | 入栈 |
+| `pop()` | 出栈，返回栈顶元素 |
+| `peek()` | 查看栈顶元素 |
+| `isEmpty()` | 是否为空 |
+| `size()` | 元素数量 |
+| `clear()` | 清空栈 |
+| `toString()` | 返回逗号分隔的字符串 |
+
+### `Queue<T>`
+
+基于对象实现的队列（FIFO）。
+
+| 方法 | 说明 |
+|------|------|
+| `enqueue(el)` | 入队 |
+| `dequeue()` | 出队，返回队首元素 |
+| `peek()` | 查看队首元素 |
+| `isEmpty()` | 是否为空 |
+| `size()` | 元素数量 |
+| `clear()` | 清空队列 |
+| `getItems()` | 返回所有元素数组 |
+| `toString()` | 返回逗号分隔的字符串 |
+
+### `Deque<T>`
+
+双端队列，支持从两端添加/移除元素。
+
+| 方法 | 说明 |
+|------|------|
+| `addFront(el)` | 从队首添加 |
+| `addBack(el)` | 从队尾添加 |
+| `removeFront()` | 移除队首元素 |
+| `removeBack()` | 移除队尾元素 |
+| `peekFront()` | 查看队首元素 |
+| `peekBack()` | 查看队尾元素 |
+| `isEmpty()` | 是否为空 |
+| `size()` | 元素数量 |
+| `clear()` | 清空 |
+| `getItems()` | 返回所有元素数组 |
+| `toString()` | 返回逗号分隔的字符串 |
+
+### `decimalToBase(decNumber, base?)`
+
+十进制转任意进制（2~36）。
+
+```ts
+decimalToBase(255)     // "11111111"（二进制）
+decimalToBase(255, 16) // "FF"（十六进制）
+decimalToBase(100, 8)  // "144"（八进制）
 ```
 
 ## 技术栈
 
-| 类别       | 技术方案                          |
-| -------- | ----------------------------- |
-| 核心框架     | React 19 + TypeScript         |
-| UI 组件库   | Ant Design 5                  |
-| 可视化引擎    | AntV G2 5.0                   |
-| 地理空间服务   | Cesium 1.x                    |
-| 路由       | React Router 7                |
-| HTTP 请求  | Axios                         |
-| 数据服务     | Open-Meteo API + 高德天气 API     |
-| 工程化      | Vite 6 + pnpm + ESLint        |
-| 单元测试     | Vitest                        |
+- **框架**：React 19 + TypeScript
+- **构建**：Vite 6
+- **UI**：Ant Design 5
+- **图表**：AntV G2
+- **地图**：CesiumJS
+- **路由**：React Router 7
+- **HTTP**：Axios
+- **样式**：Sass
+- **测试**：Vitest
 
-## 功能模块
+## 快速开始
 
-### 数据结构
+```bash
+# 安装依赖
+pnpm install
 
-| 路由            | 说明              |
-| ------------- | --------------- |
-| `/`           | 栈（数组实现）可视化演示    |
-| `/stack-obj`  | 栈（对象实现）可视化演示    |
-| `/queue`      | 队列可视化演示         |
+# 启动开发服务器
+pnpm dev
 
-#### 已实现数据结构
+# 构建生产版本
+pnpm build
 
-- **StackArray**：基于数组实现的栈，支持 `push` / `pop` / `peek` / `clear` / `isEmpty`
-- **StackObj**：基于对象（哈希索引）实现的栈，私有字段封装，支持 `toString`
-- **Queue**：基于对象实现的队列，支持 `enqueue` / `dequeue` / `peek` / `size` / `clear`
-
-### 地图与可视化
-
-- **GIS 交互**：点击 Cesium 地图区域，自动获取该地区的实时天气数据
-- **图表展示**：使用 AntV G2 渲染温度、湿度等气象指标折线图
-
-## 项目结构
-
-```
-src/
-├── algorithm/        # 数据结构实现（Stack、Queue）
-├── api/              # 接口封装（Open-Meteo、高德天气）
-├── components/       # 公共组件（Cesium 地图、G2 图表）
-├── routes/           # 路由配置
-├── views/            # 页面视图（Stack、Queue）
-├── utils/            # 工具函数与请求封装
-└── types/            # TypeScript 类型声明
+# 预览构建结果
+pnpm preview
 ```
 
-## 开发背景
+## 部署
 
-本项目作为从 Vue 技术栈向 React 迁移的技术验证平台，重点验证：
+项目配置了 GitHub Pages 自动部署：
 
-- React 19 + TSX 在复杂可视化场景下的组件架构模式
-- Cesium 在 React 环境下的集成方案（via `vite-plugin-cesium`）
-- 数据结构算法的交互式可视化实现思路
+```bash
+pnpm deploy
+```
+
+执行后会自动构建并将 `dist` 目录推送到 `gh-pages` 分支。

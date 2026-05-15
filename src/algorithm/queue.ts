@@ -80,16 +80,38 @@ export class Deque<T = unknown> {
   }
 
   addFront(el: T) {
-    // this.#items[this.#lowestCount - 1] = el
-    // this.#lowestCount--
-    // this.#count++
+    if (this.isEmpty()) return this.addBack(el)
+
+    this.#items[this.#lowestCount - 1] = el
+    this.#lowestCount--
   }
 
-  addBack(el: T) {}
+  addBack(el: T) {
+    this.#items[this.#count] = el
+    this.#count++
+  }
 
-  removeFront() {}
+  removeFront() {
+    if (this.isEmpty()) return
 
-  removeBack() {}
+    const el = this.#items[this.#lowestCount]
+    delete this.#items[this.#lowestCount]
+
+    this.#lowestCount++
+
+    return el
+  }
+
+  removeBack() {
+    if (this.isEmpty()) return
+
+    const el = this.#items[this.#count - 1]
+    delete this.#items[this.#count - 1]
+
+    this.#count--
+
+    return el
+  }
 
   peekFront() {
     return this.#items[this.#lowestCount]
@@ -126,5 +148,15 @@ export class Deque<T = unknown> {
 
   values() {
     return this.#items
+  }
+
+  getItems() {
+    if (this.isEmpty()) return []
+
+    const items = []
+    for (let i = this.#lowestCount; i < this.#count; i++)
+      items.push(this.#items[i])
+
+    return items
   }
 }

@@ -26,6 +26,7 @@ const LayoutComp: React.FC = () => {
     <Layout>
       <Header style={{ display: 'flex', alignItems: 'center' }}>
         <div className="demo-logo" />
+
         <Menu
           theme="dark"
           mode="horizontal"
@@ -34,6 +35,7 @@ const LayoutComp: React.FC = () => {
           style={{ flex: 1, minWidth: 0 }}
         />
       </Header>
+
       <Layout>
         {/* <Sider width={200} style={{ background: colorBgContainer }}>
             <Menu
@@ -42,12 +44,14 @@ const LayoutComp: React.FC = () => {
               items={items1}
               style={{ height: '100%', borderRight: 0 }}
             />
+            
           </Sider> */}
         <Layout style={{ padding: '24px' }}>
           {/* <Breadcrumb
               items={[{ title: 'Home' }, { title: 'List' }, { title: 'App' }]}
               style={{ margin: '16px 0' }}
             /> */}
+
           <Content
             style={{
               padding: 24,
