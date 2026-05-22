@@ -9,11 +9,21 @@ export class Queue<T = unknown> {
     this.#items = {}
   }
 
+  /**
+   * 向队列尾部添加一个元素
+   *
+   * @param {T} el
+   */
   enqueue(el: T) {
     this.#items[this.#count] = el
     this.#count++
   }
 
+  /**
+   * 从队列头部移除一个元素
+   *
+   * @returns {T | undefined}
+   */
   dequeue() {
     if (this.isEmpty()) return
 
@@ -79,6 +89,11 @@ export class Deque<T = unknown> {
     this.#items = {}
   }
 
+  /**
+   * 向双端队列前端添加一个元素
+   *
+   * @param {T} el
+   */
   addFront(el: T) {
     if (this.isEmpty()) return this.addBack(el)
 
@@ -86,11 +101,21 @@ export class Deque<T = unknown> {
     this.#lowestCount--
   }
 
+  /**
+   * 向双端队列尾部添加一个元素
+   *
+   * @param {T} el
+   */
   addBack(el: T) {
     this.#items[this.#count] = el
     this.#count++
   }
 
+  /**
+   * 从双端队列前端移除一个元素
+   *
+   * @returns {T | undefined}
+   */
   removeFront() {
     if (this.isEmpty()) return
 
@@ -102,6 +127,11 @@ export class Deque<T = unknown> {
     return el
   }
 
+  /**
+   * 从双端队列尾部移除一个元素
+   *
+   * @returns {T | undefined}
+   */
   removeBack() {
     if (this.isEmpty()) return
 
@@ -159,4 +189,27 @@ export class Deque<T = unknown> {
 
     return items
   }
+}
+
+/**
+ * 击鼓传花（队列版）
+ *
+ * @export
+ * @param {string[]} elementsList
+ * @param {number} num
+ * @returns {{ eliminated: string[]; winner: string; }}
+ */
+export function hotPotato(elementsList: string[], num: number) {
+  const queue = new Queue<string>()
+  const eliminated = []
+
+  for (let i = 0; i < elementsList.length; i++) queue.enqueue(elementsList[i])
+
+  while (queue.size() > 1) {
+    for (let i = 0; i < num; i++) queue.enqueue(queue.dequeue()!)
+
+    eliminated.push(queue.dequeue())
+  }
+
+  return { eliminated, winner: queue.dequeue() }
 }

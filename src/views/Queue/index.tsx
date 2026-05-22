@@ -1,4 +1,5 @@
 import { Deque, Queue } from '@/algorithm'
+import { hotPotato } from '@/algorithm/queue'
 import {
   Button,
   Card,
@@ -8,12 +9,22 @@ import {
   Typography,
   Flex,
   Col,
+  Input,
+  InputNumber,
+  Form,
+  FormProps,
 } from 'antd'
+import FormItem from 'antd/es/form/FormItem'
 import React, { useRef, useState } from 'react'
 
+interface FormFileds {
+  names: string
+  num: number
+}
 type QueItem = string | number
 
 const Page: React.FC = () => {
+  /* 队列 */
   const queueRef = useRef(new Queue<QueItem>())
   const [queItems, setQueItems] = useState<QueItem[]>([])
 
@@ -87,6 +98,7 @@ const Page: React.FC = () => {
     }
   }
 
+  /* 双端队列 */
   const dequeRef = useRef(new Deque<QueItem>())
   const [dqueItems, setDqueItems] = useState<QueItem[]>([])
 
@@ -158,9 +170,7 @@ const Page: React.FC = () => {
         </Button>
 
         <Button
-          onClick={() =>
-            message.info('size: ' + dequeRef.current.size())
-          }
+          onClick={() => message.info('size: ' + dequeRef.current.size())}
           type="primary"
         >
           size
@@ -190,6 +200,56 @@ const Page: React.FC = () => {
     return Math.random().toString(36).slice(2, 8)
   }
 
+  /* 击鼓传花 */
+  const resultRef = useRef<ReturnType<typeof hotPotato>>({
+    winner: '',
+    eliminated: [],
+  })
+  // const [winner, setWinner] = useState('')
+
+  const onValuesChange: FormProps<FormFileds>['onValuesChange'] = (
+    _,
+    { names, num },
+  ) => {
+    const result = hotPotato(names?.split(',') ?? [], num)
+    resultRef.current = result
+    // setWinner(result.winner!)
+    console.log({
+      // result,
+      names,
+      num,
+    })
+  }
+
+  const HotPotatoEl = () => (
+    <Card title="Potato-击鼓传花" style={{ minWidth: 500 }}>
+      <Form
+        onValuesChange={onValuesChange}
+        initialValues={{
+          names: 'John,Jack,Camila,Ingrid,Carl,Tom,Lucy',
+          num: 7,
+        }}
+      >
+        <FormItem label="人员添加" name="names">
+          <Input />
+        </FormItem>
+
+        <FormItem label="轮次" name="num">
+          <InputNumber />
+        </FormItem>
+      </Form>
+
+      {/* <FormItem>
+        <Button type="primary">开始传递</Button>
+      </FormItem> */}
+
+      <Flex gap="middle" wrap>
+        {/* <h2>执花人：{winner}</h2> */}
+        <h2>执花人：{resultRef.current.winner}</h2>
+      </Flex>
+    </Card>
+  )
+
   return (
     <>
       <QueueEl />
@@ -197,6 +257,10 @@ const Page: React.FC = () => {
       <Divider />
 
       <DequeEl />
+
+      <Divider />
+
+      <HotPotatoEl />
     </>
   )
 }
