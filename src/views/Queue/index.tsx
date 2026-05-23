@@ -12,10 +12,10 @@ import {
   Input,
   InputNumber,
   Form,
-  FormProps,
 } from 'antd'
+import { useForm, useWatch } from 'antd/es/form/Form'
 import FormItem from 'antd/es/form/FormItem'
-import React, { useRef, useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 
 interface FormFileds {
   names: string
@@ -23,18 +23,24 @@ interface FormFileds {
 }
 type QueItem = string | number
 
-const Page: React.FC = () => {
-  /* 队列 */
+/* 队列 */
+const QueueEl = () => {
   const queueRef = useRef(new Queue<QueItem>())
   const [queItems, setQueItems] = useState<QueItem[]>([])
 
   // console.log({ queueRef, setQueItems })
 
-  function enqueue() {
-    queueRef.current.enqueue(randomItem())
+  const enqueue = () => queueRef.current.enqueue(randomItem())
+
+  const withUpdate = (foo?: (...args: unknown[]) => void) => () => {
+    foo?.()
+
+    // console.log({ message })
+
+    setQueItems(queueRef.current.getItems())
   }
 
-  const QueueEl = () => (
+  return (
     <Card title="Queue-队列" style={{ minWidth: 500 }}>
       <Typography>
         <Space>
@@ -87,18 +93,10 @@ const Page: React.FC = () => {
       </Typography>
     </Card>
   )
+}
 
-  function withUpdate(foo?: (...args: unknown[]) => void) {
-    return () => {
-      foo?.()
-
-      // console.log({ message })
-
-      setQueItems(queueRef.current.getItems())
-    }
-  }
-
-  /* 双端队列 */
+/* 双端队列 */
+const DequeEl = () => {
   const dequeRef = useRef(new Deque<QueItem>())
   const [dqueItems, setDqueItems] = useState<QueItem[]>([])
 
@@ -109,7 +107,7 @@ const Page: React.FC = () => {
     setDqueItems(dequeRef.current.getItems())
   }
 
-  const DequeEl = () => (
+  return (
     <Card title="Deque-双端队列" style={{ minWidth: 500 }}>
       <Flex gap="middle" wrap>
         <Button
@@ -195,36 +193,22 @@ const Page: React.FC = () => {
       </Flex>
     </Card>
   )
+}
 
-  function randomItem() {
-    return Math.random().toString(36).slice(2, 8)
-  }
+/* 击鼓传花 */
+const HotPotatoEl = () => {
+  const [form] = useForm<FormFileds>()
+  const names = useWatch('names', form)
+  const num = useWatch('num', form)
+  const result = useMemo(
+    () => hotPotato(names?.split(',') ?? [], num),
+    [names, num],
+  )
 
-  /* 击鼓传花 */
-  const resultRef = useRef<ReturnType<typeof hotPotato>>({
-    winner: '',
-    eliminated: [],
-  })
-  // const [winner, setWinner] = useState('')
-
-  const onValuesChange: FormProps<FormFileds>['onValuesChange'] = (
-    _,
-    { names, num },
-  ) => {
-    const result = hotPotato(names?.split(',') ?? [], num)
-    resultRef.current = result
-    // setWinner(result.winner!)
-    console.log({
-      // result,
-      names,
-      num,
-    })
-  }
-
-  const HotPotatoEl = () => (
+  return (
     <Card title="Potato-击鼓传花" style={{ minWidth: 500 }}>
       <Form
-        onValuesChange={onValuesChange}
+        form={form}
         initialValues={{
           names: 'John,Jack,Camila,Ingrid,Carl,Tom,Lucy',
           num: 7,
@@ -239,17 +223,18 @@ const Page: React.FC = () => {
         </FormItem>
       </Form>
 
-      {/* <FormItem>
-        <Button type="primary">开始传递</Button>
-      </FormItem> */}
-
       <Flex gap="middle" wrap>
-        {/* <h2>执花人：{winner}</h2> */}
-        <h2>执花人：{resultRef.current.winner}</h2>
+        <h2>执花人：{result.winner}</h2>
       </Flex>
     </Card>
   )
+}
 
+function randomItem() {
+  return Math.random().toString(36).slice(2, 8)
+}
+
+const Page: React.FC = () => {
   return (
     <>
       <QueueEl />
