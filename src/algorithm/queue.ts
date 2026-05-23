@@ -1,3 +1,11 @@
+/**
+ * 队列（Queue）
+ *
+ * @export
+ * @class Queue
+ * @typedef {Queue}
+ * @template [T=unknown]
+ */
 export class Queue<T = unknown> {
   #count: number
   #lowestCount: number
@@ -78,6 +86,14 @@ export class Queue<T = unknown> {
   }
 }
 
+/**
+ * 双端队列（Deque）
+ *
+ * @export
+ * @class Deque
+ * @typedef {Deque}
+ * @template [T=unknown]
+ */
 export class Deque<T = unknown> {
   #count: number
   #lowestCount: number
@@ -212,4 +228,26 @@ export function hotPotato(elementsList: string[], num: number) {
   }
 
   return { eliminated, winner: queue.dequeue() }
+}
+
+/**
+ * 回文检测（双端队列版）
+ *
+ * @export
+ * @param {string} aStr
+ * @returns {boolean}
+ */
+export function palindromeChecker(aStr: string) {
+  if (!aStr) return false
+
+  const deque = new Deque()
+  const lowerStr = aStr.toLocaleLowerCase().split(' ').join('')
+
+  for (let i = 0; i < lowerStr.length; i++) deque.addBack(lowerStr[i])
+
+  while (deque.size() > 1) {
+    if (deque.removeFront() !== deque.removeBack()) return false
+  }
+
+  return true
 }

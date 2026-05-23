@@ -1,5 +1,5 @@
 import { Deque, Queue } from '@/algorithm'
-import { hotPotato } from '@/algorithm/queue'
+import { hotPotato, palindromeChecker } from '@/algorithm/queue'
 import {
   Button,
   Card,
@@ -195,6 +195,10 @@ const DequeEl = () => {
   )
 }
 
+function randomItem() {
+  return Math.random().toString(36).slice(2, 8)
+}
+
 /* 击鼓传花 */
 const HotPotatoEl = () => {
   const [form] = useForm<FormFileds>()
@@ -223,15 +227,37 @@ const HotPotatoEl = () => {
         </FormItem>
       </Form>
 
-      <Flex gap="middle" wrap>
-        <h2>执花人：{result.winner}</h2>
+      <Flex gap="middle" justify="space-between">
+        <ul>
+          {result.eliminated.map(v => (
+            <li key={v}>{v}在击鼓传花中被淘汰！</li>
+          ))}
+        </ul>
+
+        <h2>胜利者：{result.winner}</h2>
       </Flex>
     </Card>
   )
 }
 
-function randomItem() {
-  return Math.random().toString(36).slice(2, 8)
+const PalindromeEl = () => {
+  const [form] = useForm<FormFileds>()
+  const text = useWatch('text', form)
+  const isEqual = useMemo(() => palindromeChecker(text), [text])
+
+  return (
+    <Card title="Palindrome-回文检测-双端队列" style={{ minWidth: 500 }}>
+      <Form form={form}>
+        <FormItem label="文本" name="text">
+          <Input />
+        </FormItem>
+      </Form>
+
+      <Flex gap="middle" justify="space-between">
+        <h2>是否回文：{isEqual ? '✅' : '❌'}</h2>
+      </Flex>
+    </Card>
+  )
 }
 
 const Page: React.FC = () => {
@@ -246,6 +272,10 @@ const Page: React.FC = () => {
       <Divider />
 
       <HotPotatoEl />
+
+      <Divider />
+
+      <PalindromeEl />
     </>
   )
 }
