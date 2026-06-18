@@ -1,15 +1,6 @@
 import { LinkedList } from '@/algorithm'
 import { genrateItems } from '@/algorithm/util'
-import {
-  Card,
-  Flex,
-  Input,
-  Form,
-  Button,
-  Divider,
-  message,
-  Col,
-} from 'antd'
+import { Card, Flex, Input, Form, Button, Divider, message, Col } from 'antd'
 import { useForm, useWatch } from 'antd/es/form/Form'
 import FormItem from 'antd/es/form/FormItem'
 import React, { useMemo, useState } from 'react'
@@ -159,10 +150,34 @@ const PalindromeEl = () => {
   )
 }
 
+const DoubleLinkEl = () => {
+  const [form] = useForm<FormFileds>()
+  // const text = useWatch('text', form)
+  // const isEqual = useMemo(() => palindromeChecker(text), [text])
+
+  return (
+    <Card title="双向链表" style={{ minWidth: 500 }}>
+      <Form form={form}>
+        <Flex gap={10}>
+          <FormItem label="移除" name="deleteIndex">
+            <Input type="number" />
+          </FormItem>
+
+          <Button type="primary">移除</Button>
+        </Flex>
+      </Form>
+    </Card>
+  )
+}
+
 const Page: React.FC = () => {
   return (
     <>
       <PalindromeEl />
+
+      <Divider />
+
+      <DoubleLinkEl />
     </>
   )
 }

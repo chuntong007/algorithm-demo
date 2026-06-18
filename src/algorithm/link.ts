@@ -110,8 +110,16 @@ export class LinkedList {
     return this.#count
   }
 
+  setCount(count: number) {
+    this.#count = count
+  }
+
   getHead() {
     return this.#head
+  }
+
+  setHead(node?: Node) {
+    this.#head = node
   }
 
   toString() {
@@ -140,9 +148,33 @@ export class DoubleNode extends Node {
 }
 
 export class DoublyLinkedList extends LinkedList {
-  tail?: DoubleNode
+  #tail?: DoubleNode
 
   constructor(equalsFn = defaultEquals) {
     super(equalsFn)
+  }
+
+  insert(el: unknown, position: number) {
+    if (position < 0 || position > this.size()) return false
+
+    const node = new DoubleNode(el)
+
+    if (position === 0) {
+      const current = this.getHead()
+      node.next = current
+      this.setHead(node)
+    } else {
+      // todo.....
+      const prev = this.getElementAt(position - 1)
+      node.next = prev?.next
+      node.prev = prev
+      prev!.next = node
+
+      if (position === this.size()) this.#tail = node
+    }
+
+    this.setCount(this.size() + 1)
+
+    return true
   }
 }
