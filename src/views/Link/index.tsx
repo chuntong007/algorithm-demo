@@ -1,6 +1,18 @@
-import { LinkedList } from '@/algorithm'
+import { DoublyLinkedList, LinkedList } from '@/algorithm'
+import { DoubleNode } from '@/algorithm/link'
 import { genrateItems } from '@/algorithm/util'
-import { Card, Flex, Input, Form, Button, Divider, message, Col } from 'antd'
+import {
+  Card,
+  Flex,
+  Input,
+  Form,
+  Button,
+  Divider,
+  message,
+  Col,
+  Typography,
+  Space,
+} from 'antd'
 import { useForm, useWatch } from 'antd/es/form/Form'
 import FormItem from 'antd/es/form/FormItem'
 import React, { useMemo, useState } from 'react'
@@ -11,6 +23,8 @@ interface FormFileds {
   deleteIndex: number
   findIndex: number
 }
+
+const { Text } = Typography
 
 const PalindromeEl = () => {
   const [form] = useForm<FormFileds>()
@@ -152,6 +166,40 @@ const PalindromeEl = () => {
 
 const DoubleLinkEl = () => {
   const [form] = useForm<FormFileds>()
+  const [curNode, setCurNode] = useState<DoubleNode>()
+  const [, setSize] = useState(0)
+  const [items] = useState(new DoublyLinkedList())
+
+  const linkTexts = useMemo(
+    () =>
+      items
+        .toString()
+        ?.split(', ')
+        .map(text => ({ text, isCurrent: text === curNode?.element })),
+    [curNode, items],
+  )
+
+  const index = useWatch('findIndex', form)
+  function findIndex() {
+    const node = items.getElementAt(index)
+    message.info(`index-"${index}" → elemet-"${node?.element}"`)
+  }
+  async function genrate() {
+    while (items.size() > 0) items.removeAt(0)
+
+    setSize(items.size())
+
+    await new Promise(r => setTimeout(r, 10))
+
+    const randomItems = genrateItems().take(index).toArray()
+    randomItems.forEach(v => items.insert(v, 0))
+    setSize(items.size())
+    setCurNode(items.getHead())
+  }
+  function toggle(foo: 'next' | 'prev') {
+    const current = curNode?.[foo]
+    setCurNode(current)
+  }
   // const text = useWatch('text', form)
   // const isEqual = useMemo(() => palindromeChecker(text), [text])
 
@@ -159,11 +207,42 @@ const DoubleLinkEl = () => {
     <Card title="双向链表" style={{ minWidth: 500 }}>
       <Form form={form}>
         <Flex gap={10}>
-          <FormItem label="移除" name="deleteIndex">
+          <FormItem label="index/生成数量" name="findIndex">
             <Input type="number" />
           </FormItem>
 
-          <Button type="primary">移除</Button>
+          <Button onClick={findIndex} disabled={index == null} type="primary">
+            查找
+          </Button>
+
+          <Button onClick={genrate} type="primary">
+            生成
+          </Button>
+        </Flex>
+
+        <Flex gap={10}>
+          <Button onClick={() => toggle('prev')} type="primary">
+            上一个
+          </Button>
+
+          <Button onClick={() => toggle('next')} type="primary">
+            下一个
+          </Button>
+
+          <div>当前：{curNode?.element + ''}</div>
+        </Flex>
+
+        <Flex gap={20} justify="space-between">
+          <Col span={16}>
+            link项：
+            <Space wrap>
+              {linkTexts.map(v => (
+                <Text mark={v.isCurrent}>{v.text}</Text>
+              ))}
+            </Space>
+          </Col>
+
+          <Col span={4}>items.size：{items.size()}</Col>
         </Flex>
       </Form>
     </Card>

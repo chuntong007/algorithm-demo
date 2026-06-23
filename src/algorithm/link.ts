@@ -160,17 +160,27 @@ export class DoublyLinkedList extends LinkedList {
     const node = new DoubleNode(el)
 
     if (position === 0) {
-      const current = this.getHead()
-      node.next = current
+      if (!this.size()) {
+        this.#tail = node
+      } else {
+        const current = this.getHead() as DoubleNode
+        node.next = current
+        current.prev = node
+      }
+
       this.setHead(node)
+    } else if (position === this.size()) {
+      const curent = this.#tail
+      node.prev = curent
+      curent!.next = node
+      this.#tail = node
     } else {
-      // todo.....
       const prev = this.getElementAt(position - 1)
-      node.next = prev?.next
+      const curent = prev?.next as DoubleNode
+      node.next = curent
+      curent.prev = node
       node.prev = prev
       prev!.next = node
-
-      if (position === this.size()) this.#tail = node
     }
 
     this.setCount(this.size() + 1)
