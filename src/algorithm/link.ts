@@ -139,6 +139,7 @@ export class LinkedList {
 
 export class DoubleNode extends Node {
   prev?: DoubleNode
+  next?: DoubleNode
 
   constructor(el: unknown, next?: DoubleNode, prev?: DoubleNode) {
     super(el)
@@ -186,5 +187,33 @@ export class DoublyLinkedList extends LinkedList {
     this.setCount(this.size() + 1)
 
     return true
+  }
+
+  removeAt(index: number) {
+    if (index < 0 || index >= this.size()) return
+
+    let current
+
+    if (index === 0) {
+      if (this.size() === 1) {
+        current = this.getHead() as DoubleNode
+        this.setHead(undefined)
+        this.#tail = undefined
+      }
+    } else if (index !== this.size() - 1) {
+      current = this.getElementAt(index) as DoubleNode
+      const { prev, next } = current
+      prev!.next = next
+      next!.prev = prev
+    } else {
+      current = this.#tail
+      const prev = current?.prev
+      prev!.next = undefined
+      this.#tail = prev
+    }
+
+    this.setCount(this.size() - 1)
+
+    return current?.element
   }
 }

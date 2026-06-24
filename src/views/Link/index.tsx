@@ -1,6 +1,6 @@
 import { DoublyLinkedList, LinkedList } from '@/algorithm'
 import { DoubleNode } from '@/algorithm/link'
-import { genrateItems } from '@/algorithm/util'
+import { genrateItems, genrateRandomText } from '@/algorithm/util'
 import {
   Card,
   Flex,
@@ -167,7 +167,7 @@ const PalindromeEl = () => {
 const DoubleLinkEl = () => {
   const [form] = useForm<FormFileds>()
   const [curNode, setCurNode] = useState<DoubleNode>()
-  const [, setSize] = useState(0)
+  // const [, setSize] = useState(0)
   const [items] = useState(new DoublyLinkedList())
 
   const linkTexts = useMemo(
@@ -175,6 +175,7 @@ const DoubleLinkEl = () => {
       items
         .toString()
         ?.split(', ')
+        .filter(v => v)
         .map(text => ({ text, isCurrent: text === curNode?.element })),
     [curNode, items],
   )
@@ -187,18 +188,21 @@ const DoubleLinkEl = () => {
   async function genrate() {
     while (items.size() > 0) items.removeAt(0)
 
-    setSize(items.size())
-
     await new Promise(r => setTimeout(r, 10))
 
     const randomItems = genrateItems().take(index).toArray()
     randomItems.forEach(v => items.insert(v, 0))
-    setSize(items.size())
     setCurNode(items.getHead())
   }
   function toggle(foo: 'next' | 'prev') {
     const current = curNode?.[foo]
     setCurNode(current)
+  }
+  function insertRandomText() {
+    const text = genrateRandomText()
+    items.insert(text, +index)
+    setCurNode(items.getElementAt(+index))
+    // setSize(items.size())
   }
   // const text = useWatch('text', form)
   // const isEqual = useMemo(() => palindromeChecker(text), [text])
@@ -215,8 +219,12 @@ const DoubleLinkEl = () => {
             查找
           </Button>
 
-          <Button onClick={genrate} type="primary">
+          <Button onClick={genrate} disabled={!index} type="primary">
             生成
+          </Button>
+
+          <Button onClick={insertRandomText} disabled={!index} type="primary">
+            插入随机文本
           </Button>
         </Flex>
 
@@ -237,7 +245,9 @@ const DoubleLinkEl = () => {
             link项：
             <Space wrap>
               {linkTexts.map(v => (
-                <Text mark={v.isCurrent}>{v.text}</Text>
+                <Text key={v.text} mark={v.isCurrent}>
+                  text: {v.text}
+                </Text>
               ))}
             </Space>
           </Col>
