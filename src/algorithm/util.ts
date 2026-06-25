@@ -27,7 +27,7 @@ export function genrateRandomText() {
  *
  * @return  {[type]}           [return description]
  */
-export function* calcProfit(
+export function calcProfit(
   options: { bj?: number; sy?: number; jd?: number[]; mc?: number[] } = {},
 ) {
   const { bj, sy, jd, mc } = {
@@ -44,24 +44,24 @@ export function* calcProfit(
   for (let i = 0; i < jd.length; i++) {
     const add = jd[i]
     const hc = mc[i]
-    benj = bj * (1 + add)
+    benj = benj * (1 + add)
     maic = benj - benj * (1 - hc)
     benj -= maic
     shouy += maic
 
-    yield {
+    console.log({
       tip: `第${i + 1}轮止盈`,
       原始资金: bj,
       本金: benj,
       收益: shouy,
       增长: add,
       卖出: maic,
-    }
+    })
   }
 }
 // gen = calcProfit({ bj: 5000 })
 
-export function* calcProfitJS(options = {}) {
+export function calcProfitJS(options = {}) {
   const { bj, sy, jd, mc } = {
     bj: 1,
     sy: 0,
@@ -76,19 +76,19 @@ export function* calcProfitJS(options = {}) {
   for (let i = 0; i < jd.length; i++) {
     const add = jd[i]
     const hc = mc[i]
-    benj = bj * (1 + add)
+    benj = benj * (1 + add)
     maic = benj - benj * (1 - hc)
     benj -= maic
     shouy += maic
 
-    yield {
+    console.log({
       tip: `第${i + 1}轮止盈`,
       原始资金: bj,
       本金: benj,
       收益: shouy,
       增长: add,
       卖出: maic,
-    }
+    })
   }
 }
 // gen = calcProfitJS({ bj: 5000 })
